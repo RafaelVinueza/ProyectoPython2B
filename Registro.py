@@ -72,7 +72,7 @@ class Registro:
         entry_nombre.place(x = 250, y = 70)
 
         entry_nombre_usuario = tkinter.Entry(ventana, textvariable=nombre_usuario, width="30")
-        nombre_usuario.trace("w", lambda *args: self.limitador(nombre_usuario, 20))
+        nombre_usuario.trace("w", lambda *args: self.limitador(nombre_usuario, 10))
         entry_nombre_usuario.place(x = 250, y = 120)
 
         entry_contrasenia = tkinter.Entry(ventana, textvariable=contrasenia, width="30", show="*")

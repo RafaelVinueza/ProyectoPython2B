@@ -1,5 +1,10 @@
 import pygame, sys
 from pygame.locals import *
+from firebase import firebase as fb
+from datetime import date
+from datetime import datetime
+from operator import itemgetter
+import numpy as np
 
 class Game:
 
@@ -160,13 +165,71 @@ class Game:
 
     def marcadores(self):
         running = True
+
+        firebase = fb.FirebaseApplication("https://proyectopython2020a-d2866.firebaseio.com/", None)
+        resultados_documentos = firebase.get('/proyectopython2020a-d2866/Puntaje', '')
+        
+        array_resultados = np.array([])
+
+        for documento in resultados_documentos:
+                usuario = resultados_documentos[documento]
+                array_resultados = np.append(array_resultados, usuario, axis=None)
+        
+        array_resultados = sorted(array_resultados, key=itemgetter('score'), reverse=True) 
+        array_resultados = array_resultados[0:10]
+
         while running:
 
-            self.screen.fill((0,0,0))
-            self.draw_text('marcadores', self.font_title, (255,255,255), self.screen, 20, 20)
+            mx, my = pygame.mouse.get_pos()
 
-            #aqui funcionalidad
+            self.screen.fill((76,43,100))
+            pygame.draw.rect(self.screen, (15,13,62), [0, 0, 800, 70])
+            self.draw_text('Marcadores', self.font_title, (255,255,255), self.screen, 300, 20)
 
+            #Rectangulos para lineas verticales
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 60, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 245, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 430, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 615, 529], 2)
+
+            #Rectangulos para lineas horizontales
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 50], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 98], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 146], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 194], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 242], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 290], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 338], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 386], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 434], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 482], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 530], 2)
+
+            #Titulos de los marcadores
+            self.draw_text('Nr°', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 15, 85)
+            self.draw_text('Usuario', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 110, 85)
+            self.draw_text('Fecha', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 305, 85)
+            self.draw_text('Pais', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 500, 85)
+            self.draw_text('Score', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 680, 85)
+
+            #Datos
+            for i in range(len(array_resultados)):
+                usuario = array_resultados[i]
+                self.draw_text(str(i + 1), pygame.font.SysFont(None, 30), (216,213,244), self.screen, 15, 135 + (i * 48))
+                self.draw_text(usuario['nombre_usuario'], pygame.font.SysFont(None, 30), (216,213,244), self.screen, 65, 135 + (i * 48))
+                self.draw_text(usuario['fecha_puntaje'], pygame.font.SysFont(None, 30), (216,213,244), self.screen, 250, 135 + (i * 48))
+                self.draw_text(usuario['pais'], pygame.font.SysFont(None, 30), (216,213,244), self.screen, 435, 135 + (i * 48))
+                self.draw_text(str(usuario['score']), pygame.font.SysFont(None, 30), (216,213,244), self.screen, 630, 135 + (i * 48))
+
+            pointlist = [(80, 15), (80, 55), (30, 35)]
+            button_return = pygame.draw.polygon(self.screen, (167,75,148), pointlist, 0)
+
+            if(button_return.collidepoint((mx, my))):
+                if(self.click):
+                    running = False
+
+            self.click = False
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     pygame.quit()
@@ -174,19 +237,75 @@ class Game:
                 if (event.type == KEYDOWN):
                     if(event.key == K_ESCAPE):
                         running = False
+                if (event.type == MOUSEBUTTONDOWN):
+                    if (event.button == 1):
+                        self.click = True
 
             pygame.display.update()
             self.mainClock.tick(60)
 
     def historial(self):
         running = True
+
+        firebase = fb.FirebaseApplication("https://proyectopython2020a-d2866.firebaseio.com/", None)
+        resultados_documentos = firebase.get('/proyectopython2020a-d2866/Puntaje', '')
+        
+        array_resultados = np.array([])
+
+        for documento in resultados_documentos:
+                usuario = resultados_documentos[documento]
+                if(usuario['nombre_usuario'] == self.nombre_usuario):
+                    array_resultados = np.append(array_resultados, usuario, axis=None)
+        
+        array_resultados = sorted(array_resultados, key=itemgetter('score'), reverse=True) 
+        array_resultados = array_resultados[0:10]
+
         while running:
 
-            self.screen.fill((0,0,0))
-            self.draw_text('historial', self.font_title, (255,255,255), self.screen, 20, 20)
+            mx, my = pygame.mouse.get_pos()
 
-            #aqui funcionalidad
+            self.screen.fill((76,43,100))
+            pygame.draw.rect(self.screen, (15,13,62), [0, 0, 800, 70])
+            self.draw_text('Historial', self.font_title, (255,255,255), self.screen, 300, 20)
 
+            #Rectangulos para lineas verticales
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 60, 529], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 430, 529], 2)
+
+            #Rectangulos para lineas horizontales
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 50], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 98], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 146], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 194], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 242], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 290], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 338], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 386], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 434], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 482], 2)
+            pygame.draw.rect(self.screen, (255,255,255), [0, 70, 799, 530], 2)
+
+            #Titulos de los marcadores
+            self.draw_text('Nr°', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 15, 85)
+            self.draw_text('Fecha', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 205, 85)
+            self.draw_text('Score', pygame.font.SysFont(None, 30), (216,213,244), self.screen, 600, 85)
+
+            #Datos
+            for i in range(len(array_resultados)):
+                usuario = array_resultados[i]
+                self.draw_text(str(i + 1), pygame.font.SysFont(None, 30), (216,213,244), self.screen, 15, 135 + (i * 48))
+                self.draw_text(usuario['fecha_puntaje'], pygame.font.SysFont(None, 30), (216,213,244), self.screen, 190, 135 + (i * 48))
+                self.draw_text(str(usuario['score']), pygame.font.SysFont(None, 30), (216,213,244), self.screen, 600, 135 + (i * 48))
+
+            pointlist = [(80, 15), (80, 55), (30, 35)]
+            button_return = pygame.draw.polygon(self.screen, (167,75,148), pointlist, 0)
+
+            if(button_return.collidepoint((mx, my))):
+                if(self.click):
+                    running = False
+
+            self.click = False
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     pygame.quit()
@@ -194,6 +313,9 @@ class Game:
                 if (event.type == KEYDOWN):
                     if(event.key == K_ESCAPE):
                         running = False
+                if (event.type == MOUSEBUTTONDOWN):
+                    if (event.button == 1):
+                        self.click = True
 
             pygame.display.update()
             self.mainClock.tick(60)
