@@ -1,18 +1,25 @@
-import pygame, sys
+import pygame, sys, os
 from pygame.locals import *
 from firebase import firebase as fb
 from datetime import date
 from datetime import datetime
 from operator import itemgetter
+from Perfil import Perfil as pf
 import numpy as np
 
 class Game:
 
-    def __init__(self, nombre, nombre_usuario, fecha_nacimiento, pais, login):
+    def __init__(self, documento_usuario, nombre, nombre_usuario, correo, fecha_nacimiento, pais, login):
+        x = 400
+        y = 150
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
+        self.advertencia = ''
         self.nombre = nombre
         self.nombre_usuario = nombre_usuario
         self.fecha_nacimiento = fecha_nacimiento
         self.pais = pais
+        self.correo = correo
+        self.documento_usuario = documento_usuario
         self.mainClock = pygame.time.Clock()
         pygame.init()
         pygame.display.set_caption('Wing Gundam Zero')
@@ -21,6 +28,12 @@ class Game:
         self.font_buttons = pygame.font.SysFont(None, 30)
         self.click = False
         self.login = login
+        self.tecla_arriba = 'UP'
+        self.tecla_abajo = 'DOWN'
+        self.tecla_izquierda = 'LEFT'
+        self.tecla_derecha = 'RIGHT'
+        self.tecla_disparar = 'SPACE'
+        self.tecla_salir = 'ESCAPE'
 
     def menu_principal(self):
 
@@ -104,53 +117,214 @@ class Game:
 
     
     def game(self):
-        running = True
-        while running:
-
-            self.screen.fill((0,0,0))
-            self.draw_text('game', self.font_title, (255,255,255), self.screen, 20, 20)
-            #aqui funcionalidad
-
-            for event in pygame.event.get():
-                if (event.type == QUIT):
-                    pygame.quit()
-                    sys.exit()
-                if (event.type == KEYDOWN):
-                    if(event.key == K_ESCAPE):
-                        running = False
-
-            pygame.display.update()
-            self.mainClock.tick(60)
-
+        pygame.quit()
+        nombre_formato = self.nombre.replace(' ', '_')
+        nombre_usuario_formato = self.nombre_usuario.replace(' ', '_')
+        pais_formato = self.pais.replace(' ', '_')
+        tecla_arriba = self.tecla_arriba.replace(' ', '_')
+        tecla_abajo = self.tecla_abajo.replace(' ', '_')
+        tecla_derecha = self.tecla_derecha.replace(' ', '_')
+        tecla_izquierda = self.tecla_izquierda.replace(' ', '_')
+        tecla_disparar = self.tecla_disparar.replace(' ', '_')
+        tecla_salir = self.tecla_salir.replace(' ', '_')
+        os.system('py shooter.py ' + nombre_formato + ' ' + nombre_usuario_formato + ' ' + pais_formato + ' ' + tecla_arriba + ' ' + tecla_abajo + ' ' + tecla_derecha + ' ' + tecla_izquierda + ' ' + tecla_disparar + ' ' + tecla_salir)
+        
 
     def perfil(self):
-        running = True
-        while running:
-
-            self.screen.fill((0,0,0))
-            self.draw_text('perfil', self.font_title, (255,255,255), self.screen, 20, 20)
-
-            #aqui funcionalidad
-
-            for event in pygame.event.get():
-                if (event.type == QUIT):
-                    pygame.quit()
-                    sys.exit()
-                if (event.type == KEYDOWN):
-                    if(event.key == K_ESCAPE):
-                        running = False
-
-            pygame.display.update()
-            self.mainClock.tick(60)
+        ventana_perfil = pf(self.documento_usuario, self.nombre_usuario, self.correo, self.fecha_nacimiento, self.pais)
+        ventana_perfil.start()
 
     def opciones(self):
         running = True
         while running:
 
-            self.screen.fill((0,0,0))
-            self.draw_text('options', self.font_title, (255,255,255), self.screen, 20, 20)
+            mx, my = pygame.mouse.get_pos()
 
-            #aqui funcionalidad
+            self.screen.fill((76,43,100))
+            pygame.draw.rect(self.screen, (15,13,62), [0, 0, 800, 70])
+            self.draw_text('Configuracion', self.font_title, (255,255,255), self.screen, 300, 20)
+            self.draw_text(self.advertencia, pygame.font.SysFont(None, 25), (255,255,0), self.screen, 270, 90)
+
+            self.draw_text('Arriba', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 40, 150)
+            self.draw_text(self.tecla_arriba, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 170, 150)
+            button_arriba = pygame.Rect(160, 140, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_arriba, 2)
+
+            self.draw_text('Abajo', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 40, 250)
+            self.draw_text(self.tecla_abajo, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 170, 250)
+            button_abajo = pygame.Rect(160, 240, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_abajo, 2)
+
+            self.draw_text('Disparar', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 40, 350)
+            self.draw_text(self.tecla_disparar, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 170, 350)
+            button_disparar = pygame.Rect(160, 340, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_disparar, 2)
+
+            self.draw_text('Derecha', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 460, 150)
+            self.draw_text(self.tecla_derecha, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 590, 150)
+            button_derecha = pygame.Rect(580, 140, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_derecha, 2)
+
+            self.draw_text('Izquierda', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 460, 250)
+            self.draw_text(self.tecla_izquierda, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 590, 250)
+            button_izquierda = pygame.Rect(580, 240, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_izquierda, 2)
+
+            self.draw_text('Salir', pygame.font.SysFont(None, 32), (255,255,255), self.screen, 460, 350)
+            self.draw_text(self.tecla_salir, pygame.font.SysFont(None, 32), (255,255,255), self.screen, 590, 350)
+            button_salir = pygame.Rect(580, 340, 180, 40) #(posx, posy, ancho, largo)
+            pygame.draw.rect(self.screen, (255,255,255), button_salir, 2)
+
+            pointlist = [(80, 15), (80, 55), (30, 35)]
+            button_return = pygame.draw.polygon(self.screen, (167,75,148), pointlist, 0)
+
+            if(button_arriba.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_abajo or key_name == self.tecla_derecha or key_name == self.tecla_izquierda or key_name == self.tecla_disparar or key_name == self.tecla_salir):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_arriba = key_name
+                                esperar = False
+            if(button_abajo.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_arriba or key_name == self.tecla_derecha or key_name == self.tecla_izquierda or key_name == self.tecla_disparar or key_name == self.tecla_salir):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_abajo = key_name
+                                esperar = False
+            if(button_derecha.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_abajo or key_name == self.tecla_arriba or key_name == self.tecla_izquierda or key_name == self.tecla_disparar or key_name == self.tecla_salir):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_derecha = key_name
+                                esperar = False
+            if(button_izquierda.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_abajo or key_name == self.tecla_derecha or key_name == self.tecla_arriba or key_name == self.tecla_disparar or key_name == self.tecla_salir):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_izquierda = key_name
+                                esperar = False
+            if(button_disparar.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_abajo or key_name == self.tecla_derecha or key_name == self.tecla_izquierda or key_name == self.tecla_arriba or key_name == self.tecla_salir):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_disparar = key_name
+                                esperar = False
+            if(button_salir.collidepoint((mx, my))):
+                self.advertencia = ''
+                self.draw_text('Haga click y presione la tecla que desea asignar', pygame.font.SysFont(None, 25), (0,255,0), self.screen, 220, 90)
+                if(self.click):
+                    esperar = True
+                    while esperar:
+                        event = pygame.event.wait()
+                        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                            # obtiene el nombre de la tecla
+                            key_name = pygame.key.name(event.key)
+
+                            # convierte el nombre de la tecla en mayúsculas
+                            key_name = key_name.upper()
+
+                            # si alguna tecla es presionada
+                            if event.type == pygame.KEYDOWN:
+                                # imprime en la consola la tecla presionada
+                                if(key_name == self.tecla_abajo or key_name == self.tecla_derecha or key_name == self.tecla_izquierda or key_name == self.tecla_disparar or key_name == self.tecla_arriba):
+                                    self.advertencia = 'La tecla ya se encuentra en uso'
+                                else:
+                                    self.tecla_salir = key_name
+                                esperar = False
+            if(button_return.collidepoint((mx, my))):
+                if(self.click):
+                    running = False
+
+            self.click = False
+            for event in pygame.event.get():
+                if (event.type == QUIT):
+                    pygame.quit()
+                    sys.exit()
+                if (event.type == KEYDOWN):
+                    if(event.key == K_ESCAPE):
+                        running = False
+                if (event.type == MOUSEBUTTONDOWN):
+                    if (event.button == 1):
+                        self.click = True
 
             for event in pygame.event.get():
                 if (event.type == QUIT):

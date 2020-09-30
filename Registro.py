@@ -14,6 +14,15 @@ class Registro:
         ventana.quit()
         self.login.start()
 
+    def center(self, toplevel):
+       toplevel.update_idletasks()
+       w = toplevel.winfo_screenwidth()
+       h = toplevel.winfo_screenheight()
+       size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
+       x = w/2 - size[0]/2
+       y = h/2 - size[1]/2
+       toplevel.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
     def start(self):
 
         familia_fuente = "Cambria"
@@ -28,6 +37,7 @@ class Registro:
         ventana.title("Registrarse")
         ventana.resizable(False,False)
         ventana.config(background = color_ventana)
+        self.center(ventana)
 
         titulo_principal = tkinter.Label(ventana, text="Wing Gundam Zero || Registrase", font=(familia_fuente,15), bg=color_titulo_principal, fg=color_texto)
         titulo_principal.pack(fill = tkinter.X)

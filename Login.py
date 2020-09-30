@@ -14,6 +14,15 @@ class Login:
         ventana.quit()
         Registro(self).start()
 
+    def center(self, toplevel):
+       toplevel.update_idletasks()
+       w = toplevel.winfo_screenwidth()
+       h = toplevel.winfo_screenheight()
+       size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
+       x = w/2 - size[0]/2
+       y = h/2 - size[1]/2
+       toplevel.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
     def start(self):
         familia_fuente = "Cambria"
         tamanio_fuente = 12
@@ -27,6 +36,8 @@ class Login:
         ventana.title("Ingresar al sistema")
         ventana.resizable(False,False)
         ventana.config(background = color_ventana)
+        
+        self.center(ventana)
 
         titulo_principal = tkinter.Label(ventana, text="Wing Gundam Zero || Ingresar", font=(familia_fuente,15), bg=color_titulo_principal, fg=color_texto)
         titulo_principal.pack(fill = tkinter.X)
@@ -65,7 +76,7 @@ class Login:
 
     def loguearse(self, nombre_usuario, contrasenia, advertencia, ventana):
         #print("Ejecucion del boton loguearse: ")
-
+        codigo_documento = ''
         try:
             firebase = fb.FirebaseApplication("https://proyectopython2020a-d2866.firebaseio.com/", None)
             resultados_consulta = firebase.get('/proyectopython2020a-d2866/Usuario', '')
@@ -76,10 +87,11 @@ class Login:
                     if(contrasenia == usuario['contrasenia']):
                         flag_credenciales = True
                         datos_usuario = usuario
+                        codigo_documento = documento
 
 
             if(flag_credenciales):
-                menu = Game(datos_usuario['nombre'], datos_usuario['nombre_usuario'], datos_usuario['fecha_nacimiento'], datos_usuario['pais'], self)
+                menu = Game(codigo_documento, datos_usuario['nombre'], datos_usuario['nombre_usuario'], datos_usuario['correo'], datos_usuario['fecha_nacimiento'], datos_usuario['pais'], self)
                 ventana.destroy()
                 ventana.quit()
                 menu.menu_principal()

@@ -1,4 +1,18 @@
-import pygame, random
+import pygame, random, sys, os
+
+x = 400
+y = 150
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
+
+nombre = sys.argv[1].replace('_', ' ')
+nombre_usuario = sys.argv[2].replace('_', ' ')
+pais = sys.argv[3].replace('_', ' ')
+tecla_arriba = sys.argv[4].replace('_', ' ')
+tecla_abajo = sys.argv[5].replace('_', ' ')
+tecla_derecha = sys.argv[6].replace('_', ' ')
+tecla_izquierda = sys.argv[7].replace('_', ' ')
+tecla_disparar = sys.argv[8].replace('_', ' ')
+tecla_salir = sys.argv[9].replace('_', ' ')
 
 WIDTH = 800
 HEIGHT = 600
