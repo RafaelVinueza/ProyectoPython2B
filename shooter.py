@@ -203,7 +203,7 @@ background = pygame.image.load("recursos/background.png").convert()
 laser_sound = pygame.mixer.Sound("recursos/laser5.ogg")
 explosion_sound = pygame.mixer.Sound("recursos/explosion.wav")
 
-pygame.mixer.music.load("recursos/music.ogg")
+pygame.mixer.music.load("recursos/megalovania.mp3")
 pygame.mixer.music.set_volume(0.2)
 
 pygame.mixer_music.play(loops=-1)

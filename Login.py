@@ -55,11 +55,6 @@ class Login:
         nombre_usuario = tkinter.StringVar()
         contrasenia = tkinter.StringVar()
 
-        ##### Borrar para presentar ########
-        nombre_usuario.set('Rafa17')
-        contrasenia.set('1234')
-        ##### Borrar para presentar ########
-
         entry_nombre = tkinter.Entry(ventana, textvariable=nombre_usuario, width="30")
         entry_nombre.place(x = 250, y = 75)
 
