@@ -34,8 +34,16 @@ class Game:
         self.tecla_derecha = 'RIGHT'
         self.tecla_disparar = 'SPACE'
         self.tecla_salir = 'ESCAPE'
+        self.numero_arriba = 273
+        self.numero_abajo = 274
+        self.numero_derecha = 275
+        self.numero_izquierda = 276
+        self.numero_disparar = 32
+        self.numero_salir = 27
 
     def menu_principal(self):
+
+
 
         while True:
 
@@ -103,11 +111,11 @@ class Game:
             for event in pygame.event.get():
                 if (event.type == QUIT):
                     pygame.quit()
-                    sys.exit()
+                    
                 if (event.type == KEYDOWN):
                     if(event.key == K_ESCAPE):
                         pygame.quit()
-                        sys.exit()
+                        
                 if (event.type == MOUSEBUTTONDOWN):
                     if (event.button == 1):
                         self.click = True
@@ -121,13 +129,11 @@ class Game:
         nombre_formato = self.nombre.replace(' ', '_')
         nombre_usuario_formato = self.nombre_usuario.replace(' ', '_')
         pais_formato = self.pais.replace(' ', '_')
-        tecla_arriba = self.tecla_arriba.replace(' ', '_')
-        tecla_abajo = self.tecla_abajo.replace(' ', '_')
-        tecla_derecha = self.tecla_derecha.replace(' ', '_')
-        tecla_izquierda = self.tecla_izquierda.replace(' ', '_')
-        tecla_disparar = self.tecla_disparar.replace(' ', '_')
-        tecla_salir = self.tecla_salir.replace(' ', '_')
-        os.system('py shooter.py ' + nombre_formato + ' ' + nombre_usuario_formato + ' ' + pais_formato + ' ' + tecla_arriba + ' ' + tecla_abajo + ' ' + tecla_derecha + ' ' + tecla_izquierda + ' ' + tecla_disparar + ' ' + tecla_salir)
+        documento_usuario = self.documento_usuario.replace(' ', '_')
+        correo = self.correo.replace(' ', '_')
+        fecha_nacimiento = self.fecha_nacimiento.replace(' ', '_')
+        
+        os.system('py shooter.py '+ documento_usuario + ' ' + nombre_formato + ' ' + nombre_usuario_formato + ' ' + correo + ' ' + fecha_nacimiento + ' ' + pais_formato + ' ' + str(self.numero_arriba) + ' ' + str(self.numero_abajo) + ' ' + str(self.numero_derecha) + ' ' + str(self.numero_izquierda) + ' ' + str(self.numero_disparar) + ' ' + str(self.numero_salir))
         
 
     def perfil(self):
@@ -188,6 +194,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_arriba = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
@@ -210,6 +217,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_abajo = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
@@ -232,6 +240,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_derecha = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
@@ -254,6 +263,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_izquierda = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
@@ -276,6 +286,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_disparar = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
@@ -298,6 +309,7 @@ class Game:
                         if event.type in (pygame.KEYDOWN, pygame.KEYUP):
                             # obtiene el nombre de la tecla
                             key_name = pygame.key.name(event.key)
+                            self.numero_salir = event.key
 
                             # convierte el nombre de la tecla en mayúsculas
                             key_name = key_name.upper()
